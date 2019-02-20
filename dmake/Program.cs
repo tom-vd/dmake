@@ -10,7 +10,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 // Other namespaces
-using UOSS;
+using XOSS;
+using XOSS.Types;
 
 // Typedefs
 using i32 = System.Int32;
@@ -41,8 +42,8 @@ namespace dmake {
 			if(!File.Exists(filename)) return Program.ExitMessage(1,"ERROR - file not found: {0}",filename);
 			String target = dic["target"];
 
-			// Prepare UOSS for Makefile type and its dependencies.
-			Array<String>.RegisterType();
+			// Prepare XOSS for Makefile type and its dependencies.
+			Array<Node<String>>.RegisterType();
 			NamedCollection.RegisterType();
 			Makefile.RegisterType();
 
@@ -96,17 +97,19 @@ namespace dmake {
 			return Program.ExitMessage(0);
 		}
 
+		[DebuggerStepThrough]
 		private static void WriteLine(String l) => Console.WriteLine("[DMAKE] {0}",l);
+		[DebuggerStepThrough]
 		private static void Write(String l) => Console.Write("[DMAKE] {0}",l);
 
 		// Converts a string representing a Dictionary<String,String> to a NamedCollection.
 		private static NamedCollection ToNamedCollection(String v) {
 			Dictionary<String,String> dic = Util.ParseDictionary(Util.Unescape(v));
-			var ret = new NamedCollection("nc",null);
+			var ret = new NamedCollection("nc");
 
 			foreach(String i in dic.Keys) {
 				//Node.Create<String>(i,dic[i],ret);
-				var nd = new Node(i,"string",typeof(String),dic[i],ret);
+				var nd = new Node<String>(i,dic[i],ret);
 				ret.Add(nd);
 			} // foreach
 

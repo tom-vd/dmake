@@ -7,15 +7,15 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 
 // Other namespaces
-using UOSS;
-using UOSS.Text;
+using XOSS;
+using XOSS.Text;
 
 // Typedefs
 using i32 = System.Int32;
 
 namespace dmake {
 	// OBject that contains IDs of Command objects (i.e. dependencies) and command lines.
-	public class Command : Node {
+	public class Command : Node_base {
 		public const String PublicTypeName = "command";
 		private readonly List<String> m_Dependencies = new List<String>();
 		
@@ -30,10 +30,10 @@ namespace dmake {
 		private static bool TypeRegistered = false;
 		internal static void RegisterType() {
 			PsiHelperNode.RegisterType();
-			Array<PsiHelperNode>.RegisterType();
+			XOSS.Types.Array<PsiHelperNode>.RegisterType();
 			if(Command.TypeRegistered) return;
 
-			TreeBuilder.RegisterType(typeof(Command),Command.PublicTypeName,(XElement el,Node Parent,Document owner) => {
+			TreeBuilder.RegisterType<Command>(Command.PublicTypeName,(XElement el,Node_base Parent,Document owner) => {
 				IEnumerable<XElement> Children = el.Elements();
 				var ret = new Command(el.Name.ToString(),Parent,owner);
 				foreach(XElement c in Children) {
@@ -47,26 +47,27 @@ namespace dmake {
 					} // if
 				} // foreach
 				return ret;
-			},(Node N,i32 lvl) => {
+			},(Node_base N,i32 lvl,StringBuilderEx sb) => {
 				TreeBuilder.CheckChildCount(N,0,0);
-				return ((Command) N).ToXML_internal(lvl);
+				((Command) N).ToXML(lvl,sb);
 			});
 
 			Command.TypeRegistered = true;
 		}
 
-		private String ToXML_internal(i32 lvl) {
-			var sb = new StringBuilderEx();
+		public override void ToXML(i32 lvl,StringBuilderEx sb) {
 			sb.InsertTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
-			foreach(Node nd in this.Children) sb.AppendLine(TreeBuilder.GenerateNodeXML(lvl + 1,nd));
+			foreach(Node_base nd in this.Children) nd.ToXML(lvl + 1,sb);
 			sb.InsertTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
-			return sb.ToString();
 		}
 		
 		public PsiHelperNode GetPsiHelper(i32 idx) => (PsiHelperNode) this.Children[this.RunIdx].Children[idx];
-		public String GetDependency(i32 idx) => (String) this.Children[this.DepIdx].Children[idx].Value;
+		public String GetDependency(i32 idx) => ((Node<String>) this.Children[this.DepIdx].Children[idx]).Value;
 		
-		public Command(String Name,Node Parent,Document owner) : base(Name,Command.PublicTypeName,typeof(Command),null,Parent,owner) {
+		public Command(String Name,Node_base Parent,Document owner) {
+			this.Name = Name;
+			this.Parent = Parent;
+			this.Owner = owner;
 		}
 	}
 }

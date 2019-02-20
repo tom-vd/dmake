@@ -61,13 +61,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UOSS, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="XOSS, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\UOSS.dll</HintPath>
+      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\XOSS.dll</HintPath>
     </Reference>
-    <Reference Include="UOSS.Text, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="XOSS.Text, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Assemblies\Win32\UOSS.Text.dll</HintPath>
+      <HintPath>..\..\..\..\..\Assemblies\Win32\XOSS.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="XOSS.Types">
+      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\XOSS.Types.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +87,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y  "$(TargetPath)" /B "E:\Programs\dmake" /B
-copy /y  "E:\Assemblies\$(PlatformName)\UOSS.dll" /B "E:\Programs\dmake" /B
+copy /y  "E:\Assemblies\$(PlatformName)\XOSS.dll" /B "E:\Programs\dmake" /B
+copy /y  "E:\Assemblies\$(PlatformName)\XOSS.Types.dll" /B "E:\Programs\dmake" /B
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

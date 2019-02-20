@@ -8,15 +8,16 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 // Other namespaces
-using UOSS;
-using UOSS.Text;
+using XOSS;
+using XOSS.Text;
+using XOSS.Types;
 
 // Typedefs
 using i32 = System.Int32;
 
 namespace dmake {
 	// Contains variables and commands, as well as a target (i.e. command ID) for the program to default to in case none is supplied.
-	public class Makefile : Node {
+	public class Makefile : Node_base {
 		public const String PublicTypeName = "makefile";
 
 		public NamedCollection Commands {
@@ -36,7 +37,7 @@ namespace dmake {
 			Command.RegisterType();
 			if(Makefile.TypeRegistered) return;
 
-			TreeBuilder.RegisterType(typeof(Makefile),Makefile.PublicTypeName,(XElement el,Node Parent,Document owner) => {
+			TreeBuilder.RegisterType(typeof(Makefile),Makefile.PublicTypeName,(XElement el,Node_base Parent,Document owner) => {
 				IEnumerable<XElement> Children = el.Elements();
 				var ret = new Makefile(el.Name.ToString(),Parent,owner);
 				foreach(XElement c in Children) {
@@ -52,36 +53,37 @@ namespace dmake {
 				} // foreach
 
 				return ret;
-			},(Node N, i32 lvl) => {
+			},(Node_base N, i32 lvl,StringBuilderEx sb) => {
 				TreeBuilder.CheckChildCount(N,0,0);
-				return ((Makefile) N).ToXML_internal(lvl);
+				((Makefile) N).ToXML(lvl,sb);
 			});
 
 			Makefile.TypeRegistered = true;
 		}
 		
-		private String ToXML_internal(i32 lvl) {
-			var sb = new StringBuilderEx();
+		public override void ToXML(i32 lvl,StringBuilderEx sb) {
 			sb.InsertTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
 
-			
-			sb.InsertTabs(lvl + 1).Append(this.m_Variables.ToXML(lvl + 1));
-			sb.InsertTabs(lvl + 1).Append(this.Commands.ToXML(lvl + 1));
+			sb.InsertTabs(lvl + 1);
+			this.m_Variables.ToXML(lvl + 1,sb);
+
+			sb.InsertTabs(lvl + 1);
+			this.Commands.ToXML(lvl + 1,sb);
+
 			sb.InsertTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
-
-			return sb.ToString();
 		}
 
-		public Makefile(Document owner) : base("obj",Makefile.PublicTypeName,typeof(Makefile),null,null,owner) {
+		public Makefile(Document owner) => this.Owner = owner;
 
+		public Makefile(String Name,Document owner) {
+			this.Name = Name;
+			this.Owner = owner;
 		}
 
-		public Makefile(String Name,Document owner) : base(Name,Makefile.PublicTypeName,typeof(Makefile),null,null,owner) {
-
-		}
-
-		public Makefile(String Name,Node Parent,Document owner) : base(Name,Makefile.PublicTypeName,typeof(Makefile),null,Parent,owner) {
-
+		public Makefile(String Name,Node_base Parent,Document owner) {
+			this.Name = Name;
+			this.Owner = owner;
+			this.Parent = Parent;
 		}
 
 		public void AddVariables(NamedCollection nc) => this.AddVariables(nc,true);
@@ -121,14 +123,14 @@ namespace dmake {
 		public String GetVariable(String idx) {
 			if(idx.Equals("wd")) {
 				if(this.m_Variables.ContainsKey("OverrideWD")) {
-					var OverrideWD = (String) this.m_Variables["OverrideWD"].Value;
+					var OverrideWD = this.m_Variables.GetValue<String>("OverrideWD");
 					if(OverrideWD.ToLower().Equals("true")) {
-						if(this.m_Variables.ContainsKey("wd")) return (String) this.m_Variables["wd"].Value;
+						if(this.m_Variables.ContainsKey("wd")) return this.m_Variables.GetValue<String>("wd");
 						throw new Exception("If OverrideWD is \"true\", specify a working directory in the wd variable");
 					} // if
 				} // if
 				return Environment.CurrentDirectory;
-			} else return (String) this.m_Variables[idx].Value;
+			} else return this.m_Variables.GetValue<String>(idx);
 		}
 	}
 }
