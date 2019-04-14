@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="XOSS">
+      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.dll</HintPath>
+    </Reference>
+    <Reference Include="XOSS.Text">
+      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="XOSS.Types">
+      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.Types.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -89,6 +89,10 @@
     <PostBuildEvent>copy /y  "$(TargetPath)" /B "E:\Programs\dmake" /B
 copy /y  "E:\Assemblies\$(PlatformName)\XOSS.dll" /B "E:\Programs\dmake" /B
 copy /y  "E:\Assemblies\$(PlatformName)\XOSS.Types.dll" /B "E:\Programs\dmake" /B
+
+copy /y  "$(TargetPath)" /B "E:\Programs\xmlbuild" /B
+copy /y  "E:\Assemblies\$(PlatformName)\XOSS.dll" /B "E:\Programs\xmlbuild" /B
+copy /y  "E:\Assemblies\$(PlatformName)\XOSS.Types.dll" /B "E:\Programs\xmlbuild" /B
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
