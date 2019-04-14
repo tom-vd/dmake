@@ -17,4 +17,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /y  &quot;$(TargetPath)&quot; /B &quot;E:\Programs\dmake&quot; /B&#xD;&#xA;copy /y  &quot;$(TargetPath)&quot; /B &quot;E:\Assemblies\$(PlatformName)&quot; /B&#xD;&#xA;" />
+  </Target>
+
 </Project>
