@@ -8,9 +8,9 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 // Other namespaces
-using XOSS;
-using XOSS.Text;
-using XOSS.Types;
+using XBOSS;
+using XBOSS.Text;
+using XBOSS.Types;
 
 // Typedefs
 using i32 = System.Int32;
@@ -51,7 +51,7 @@ namespace dmake {
 						String Name = c.Name.ToString();
 						if(Name.Equals("ExeName")) ret.ExeName_stub = c.Value;
 						else if(Name.Equals("args")) ret.Arguments_stub = c.Value;
-						else if(Name.Equals("CancelOnError")) ret.CancelOnError = c.Value.Equals("true");
+						else if(Name.Equals("CancelOnError")) ret.CancelOnError = c.Value.ToLower().Equals("true");
 					} // foreach
 					return ret;
 				},(Node_base N,i32 lvl,StringBuilderEx sb) => {
@@ -63,10 +63,11 @@ namespace dmake {
 			}
 
 			public override void ToXML(i32 lvl,StringBuilderEx sb) {
-				sb.InsertTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
-				sb.InsertTabs(lvl + 1).AppendFormat("<ExeName type=\"string\">{0}</ExeName>",this.ExeName_stub).AppendLine();
-				sb.InsertTabs(lvl + 1).AppendFormat("<args type=\"string\">{0}</args>",this.Psi.Arguments).AppendLine();
-				sb.InsertTabs(lvl).AppendFormat("</{1}>",this.Name).AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
+				sb.AppendTabs(lvl + 1).AppendFormat("<ExeName type=\"string\">{0}</ExeName>",this.ExeName_stub).AppendLine();
+				sb.AppendTabs(lvl + 1).AppendFormat("<args type=\"string\">{0}</args>",this.Psi.Arguments).AppendLine();
+				sb.AppendTabs(lvl + 1).AppendFormat("<CancelOnError type=\"bool\">{0}</CancelOnError>",this.CancelOnError ? "true" : "false").AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("</{1}>",this.Name).AppendLine();
 			}
 
 			public String BuildCommandString(NamedCollection Variables) => this.BuildString(this.ExeName_stub,Variables);

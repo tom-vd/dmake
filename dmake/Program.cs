@@ -10,8 +10,9 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 // Other namespaces
-using XOSS;
-using XOSS.Types;
+using XBOSS;
+using XBOSS.Types;
+using dmake.Types;
 
 // Typedefs
 using i32 = System.Int32;
@@ -42,7 +43,7 @@ namespace dmake {
 			if(!File.Exists(filename)) return Program.ExitMessage(1,"ERROR - file not found: {0}",filename);
 			String target = dic["target"];
 
-			// Prepare XOSS for Makefile type and its dependencies.
+			// Prepare XBOSS for Makefile type and its dependencies.
 			Array<Node<String>>.RegisterType();
 			NamedCollection.RegisterType();
 			Makefile.RegisterType();

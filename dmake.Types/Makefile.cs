@@ -8,9 +8,9 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 // Other namespaces
-using XOSS;
-using XOSS.Text;
-using XOSS.Types;
+using XBOSS;
+using XBOSS.Text;
+using XBOSS.Types;
 
 // Typedefs
 using i32 = System.Int32;
@@ -63,15 +63,15 @@ namespace dmake {
 			}
 
 			public override void ToXML(i32 lvl,StringBuilderEx sb) {
-				sb.InsertTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
 
-				sb.InsertTabs(lvl + 1);
+				sb.AppendTabs(lvl + 1);
 				this.m_Variables.ToXML(lvl + 1,sb);
 
-				sb.InsertTabs(lvl + 1);
+				sb.AppendTabs(lvl + 1);
 				this.Commands.ToXML(lvl + 1,sb);
 
-				sb.InsertTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
 			}
 
 			public Makefile(Document owner) => this.Owner = owner;

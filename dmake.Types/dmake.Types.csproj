@@ -5,20 +5,20 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="XOSS">
-      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.dll</HintPath>
-    </Reference>
-    <Reference Include="XOSS.Text">
-      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="XOSS.Types">
-      <HintPath>..\..\..\..\..\Assemblies\x64\XOSS.Types.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /y  &quot;$(TargetPath)&quot; /B &quot;E:\Programs\dmake&quot; /B&#xD;&#xA;copy /y  &quot;$(TargetPath)&quot; /B &quot;E:\Assemblies\$(PlatformName)&quot; /B&#xD;&#xA;" />
   </Target>
+
+  <ItemGroup>
+    <Reference Include="XBOSS">
+      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\XBOSS.dll</HintPath>
+    </Reference>
+    <Reference Include="XBOSS.Text">
+      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\XBOSS.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="XBOSS.Types">
+      <HintPath>..\..\..\..\..\Assemblies\AnyCPU\XBOSS.Types.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>

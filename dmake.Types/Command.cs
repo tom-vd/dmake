@@ -7,8 +7,8 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 
 // Other namespaces
-using XOSS;
-using XOSS.Text;
+using XBOSS;
+using XBOSS.Text;
 
 // Typedefs
 using i32 = System.Int32;
@@ -31,7 +31,7 @@ namespace dmake {
 			private static bool TypeRegistered = false;
 			internal static void RegisterType() {
 				PsiHelperNode.RegisterType();
-				XOSS.Types.Array<PsiHelperNode>.RegisterType();
+				XBOSS.Types.Array<PsiHelperNode>.RegisterType();
 				if(Command.TypeRegistered) return;
 
 				TreeBuilder.RegisterType<Command>(Command.PublicTypeName,(XElement el,Node_base Parent,Document owner) => {
@@ -57,9 +57,9 @@ namespace dmake {
 			}
 
 			public override void ToXML(i32 lvl,StringBuilderEx sb) {
-				sb.InsertTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("<{0} type=\"{1}\">",this.Name,this.TypeName).AppendLine();
 				foreach(Node_base nd in this.Children) nd.ToXML(lvl + 1,sb);
-				sb.InsertTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
+				sb.AppendTabs(lvl).AppendFormat("</{0}>",this.Name).AppendLine();
 			}
 
 			public PsiHelperNode GetPsiHelper(i32 idx) => (PsiHelperNode) this.Children[this.RunIdx].Children[idx];
